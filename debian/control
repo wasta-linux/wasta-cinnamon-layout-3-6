@@ -8,7 +8,7 @@ Homepage: https://github.com/wasta-linux/wasta-cinnamon-layout-3-6
 
 Package: wasta-cinnamon-layout-3-6
 Architecture: all
-Depends: cinnamon, jq, ${shlibs:Depends}, ${misc:Depends}
+Depends: cinnamon, jq, plank, ${shlibs:Depends}, ${misc:Depends}
 Recommends: arc-theme, wasta-vertex-ubuntu
 Description: Wasta-Layout Cinnamon 3.6
  Wasta-Layout options for Cinnamon 3.6
