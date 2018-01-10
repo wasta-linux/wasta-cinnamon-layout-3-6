@@ -1,3 +1,10 @@
+wasta-cinnamon-layout-3-6 (0.1.2) bionic; urgency=medium
+
+  * control: re-adding cinnamon 3.6 dependency since necessary
+    for the vertical panels used by "unity" layout 
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Wed, 10 Jan 2018 09:33:50 +0300
+
 wasta-cinnamon-layout-3-6 (0.1.1) xenial; urgency=medium
 
   * control: moved arc-theme to 'recommends', removed >= 3.6 from
