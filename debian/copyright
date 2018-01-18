@@ -2,8 +2,20 @@ Format: http://dep.debian.net/deps/dep5
 Upstream-Name: wasta-cinnamon-layout-3-6
 Source: https://github.com/wasta-linux/wasta-cinnamon-layout-3-6
 
-Files: debian
+Files: *
 Copyright: 2018 Rik Shaw <rikshaw76@gmail.com>
+License: GPL-3.0+
+
+Files: install-files/applets/calendar@simonwiles.net
+Copyright: 2012-2013 Simon Wiles <rsimonjwiles@gmail.com>
+License: GPL-3.0+
+
+Files: install-files/applets/IcingTaskManager@json
+Copyright: 2012-2013 Jason Hicks <jaszhix@gmail.com>
+License: GPL-2.0+
+
+Files: install-files/extensions/transparent-panels@germanfr
+Copyright: 2016 Germán Franco Dorca <email@domain.com>
 License: GPL-3.0+
 
 License: GPL-3.0+

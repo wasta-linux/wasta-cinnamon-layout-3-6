@@ -1,3 +1,18 @@
+wasta-cinnamon-layout-3-6 (0.1.4) xenial; urgency=medium
+
+  * postinst: set itm thumbnail-size 8
+    - set transparent panel first-launch false
+  * wasta-layout-system: only killall plank if pidof plank found
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Thu, 18 Jan 2018 11:55:45 +0300
+
+wasta-cinnamon-layout-3-6 (0.1.3) bionic; urgency=medium
+
+  * polkit: updating to auth_admin_keep so that user won't need
+    to re-enter password if run multiple times in a row.
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Wed, 10 Jan 2018 10:21:31 +0300
+
 wasta-cinnamon-layout-3-6 (0.1.2) bionic; urgency=medium
 
   * control: re-adding cinnamon 3.6 dependency since necessary

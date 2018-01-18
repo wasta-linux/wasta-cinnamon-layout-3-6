@@ -8,6 +8,9 @@
 #       is only intended to be run at package installation.
 #
 #   2018-01-05 rik: initial release
+#   2018-01-18 rik: transparent-panels: set first-launch default to false
+#   - ITM thumbnail-size default=8
+#
 #
 # ==============================================================================
 
@@ -66,7 +69,7 @@ JSON_FILE=/usr/share/cinnamon/applets/IcingTaskManager@json/3.*/settings-schema.
 # - icon-padding: increase a bit again for a bit of padding
 # - note: jq can't do "sed -i" inplace update, so need to re-create file, then
 #     update ownership (in case run as root)
-NEW_FILE=$(jq '.["number-display"].default=2 | .["pinned-apps"].default=["firefox.desktop", "thunderbird.desktop", "nemo.desktop", "libreoffice-writer.desktop", "vlc.desktop"] | .["cycleMenusHotkey"].default="" | .["enable-hover-peek"].default=false | .["icon-spacing"].default=15 | .["icon-spacing"].max=21 | .["icon-padding"].default=11' \
+NEW_FILE=$(jq '.["number-display"].default=2 | .["pinned-apps"].default=["firefox.desktop", "thunderbird.desktop", "nemo.desktop", "libreoffice-writer.desktop", "vlc.desktop"] | .["cycleMenusHotkey"].default="" | .["enable-hover-peek"].default=false | .["icon-spacing"].default=15 | .["icon-spacing"].max=21 | .["icon-padding"].default=11 | .["thumbnail-size"].default=8' \
     < $JSON_FILE)
 echo "$NEW_FILE" > $JSON_FILE
 
@@ -77,7 +80,7 @@ echo "updating JSON_FILE: $JSON_FILE"
 # - set transparency to "semi-transparent"
 # - note: jq can't do "sed -i" inplace update, so need to re-create file, then
 #     update ownership (in case run as root)
-NEW_FILE=$(jq '.["transparency-type"].default="panel-transparent-semi__internal"' \
+NEW_FILE=$(jq '.["transparency-type"].default="panel-transparent-semi__internal" | .["first-launch"].default=false' \
     < $JSON_FILE)
 echo "$NEW_FILE" > $JSON_FILE
 

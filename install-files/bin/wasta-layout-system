@@ -6,6 +6,7 @@
 # moves around gschema.override files and then recompiles schemas
 #
 #   2017-12-24 rik: initial script
+#   2018-01-18 rik: only killall plank if plank process detected
 #
 # ==============================================================================
 
@@ -67,7 +68,11 @@ resetMenu()
 # ------------------------------------------------------------------------------
 
 # all layouts: stop plank and disable plank autostart (cupertino will later re-enable)
-killall plank &> /dev/null || true;
+if [ "$(pidof plank)" ];
+then
+    killall plank &> /dev/null || true;
+fi
+
 PLANK_FILE=/etc/xdg/autostart/plank-wasta-layout.desktop
 if [ -e $PLANK_FILE ];
 then
