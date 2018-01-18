@@ -30,6 +30,7 @@
 #   2017-12-24 rik: initial script
 #   2018-01-18 rik: default: remove calendar@cinnamon.org so will be re-created
 #       with defaults
+#       - save and restore worldclocks from calendar@simonwiles.net
 #
 # ==============================================================================
 
@@ -73,7 +74,38 @@ updateITMPinned()
         echo "updating config for JSON_FILE: $JSON_FILE"
         #jq can't do "sed -i" inplace update, so need to re-create file, then
         # update ownership (in case run as root)
-        NEW_FILE=$(jq '.["pinned-apps"].value='$SAVED_LAUNCHERS < $JSON_FILE)
+        NEW_FILE=$(jq '.["pinned-apps"].value='"$SAVED_LAUNCHERS" < $JSON_FILE)
+        echo "$NEW_FILE" > $JSON_FILE
+    fi
+}
+
+updateWorldClocks()
+{
+    if [ "$SAVED_WC" ];
+    then
+        DEFAULT_CONFIG=/usr/share/cinnamon/applets/calendar@simonwiles.net/settings-schema.json
+        JSON_DIR=/home/$USER/.cinnamon/configs/calendar@simonwiles.net
+        # NOTE: #.json has to match enabled-applets number!!
+        JSON_FILE=$JSON_DIR/113.json
+
+        if ! [ -e "$JSON_FILE" ];
+        then
+            echo "copying in default json config: $DEFAULT_CONFIG"
+            mkdir -p $JSON_DIR 
+            cp $DEFAULT_CONFIG $JSON_FILE
+        fi
+
+        #now update saved launchers for ALL instances (hopefully not going to make anyone angry...)
+        echo "updating config for JSON_FILE: $JSON_FILE"
+        #jq can't do "sed -i" inplace update, so need to re-create file, then
+        # update ownership (in case run as root)
+#        JQ_INPUT=.[\"worldclocks\"].value=$SAVED_WC
+#        echo "JQ_INPUT***$JQ_INPUT***"
+#        NEW_FILE=$(jq "$JQ_INPUT" < $JSON_FILE)
+#        JQ_INPUT=.[\"worldclocks\"].value=$SAVED_WC
+#        echo "JQ_INPUT***$JQ_INPUT***"
+        NEW_FILE=$(jq '.["worldclocks"].value='"$SAVED_WC" < $JSON_FILE)
+        # read -p "$NEW_FILE"
         echo "$NEW_FILE" > $JSON_FILE
     fi
 }
@@ -83,46 +115,26 @@ updateITMPinned()
 # ------------------------------------------------------------------------------
 
 # SAVE current itm OR panel-launcher apps to restore later....
-
-# create tempfile with arbitrary old date that will seed date for most current
-#   launchers
-COMPFILE=$(mktemp)
-touch $COMPFILE -d '2000-01-01'
-
-ITM_SAVE_FILE=$COMPFILE
-ITM_PINNED_APPS=""
-# sending errors to null and making sure no error returned if no files exist
-for ITM_FILE in $(ls /home/$USER/.cinnamon/configs/IcingTaskManager@json/*.json 2> /dev/null || true);
-do
-    ITM_DATE=$(date -r $ITM_FILE)
-    if [ "$ITM_FILE" -nt "$ITM_SAVE_FILE" ];
-    then    
-        ITM_SAVE_FILE=$ITM_FILE
-        ITM_PINNED_APPS=$(jq -c '.["pinned-apps"].value' < $ITM_SAVE_FILE)
-    fi
-done
-
-#PL_FILES=$(ls -1 /home/$USER/.cinnamon/configs/panel-launchers@cinnamon.org/*.json)
-PL_SAVE_FILE=$COMPFILE
-PL_LAUNCHERS=""
-# sending errors to null and making sure no error returned if no files exist
-for PL_FILE in $(ls /home/$USER/.cinnamon/configs/panel-launchers@cinnamon.org/*.json 2> /dev/null || true);
-do
-    PL_DATE=$(date -r $PL_FILE)
-    if [ "$PL_FILE" -nt "$PL_SAVE_FILE" ];
-    then    
-        PL_SAVE_FILE=$PL_FILE
-        PL_LAUNCHERS=$(jq -c '.["launcherList"].value' < $PL_SAVE_FILE)
-    fi
-done
-
 SAVED_LAUNCHERS=""
-if [ "$PL_SAVE_FILE" -nt "$ITM_SAVE_FILE" ];
+
+PL_FILE=/home/$USER/.cinnamon/configs/panel-launchers@cinnamon.org/103.json
+if [ -e "$PL_FILE" ];
+then
+    PL_LAUNCHERS=$(jq -c '.["launcherList"].value' < $PL_FILE)
+fi
+
+ITM_FILE=/home/$USER/.cinnamon/configs/IcingTaskManager@json/115.json
+if [ -e "$ITM_FILE" ];
+then
+    ITM_PINNED_APPS=$(jq -c '.["pinned-apps"].value' < $ITM_FILE)
+fi
+
+if [ "$PL_FILE" -nt "$ITM_FILE" ];
 then
     echo "*** PL newest"
     SAVED_LAUNCHERS=$PL_LAUNCHERS
     echo "*** SAVED_LAUNCHERS set to: $PL_LAUNCHERS"
-elif [ "$ITM_SAVE_FILE" -nt "$PL_SAVE_FILE" ];
+elif [ "$ITM_FILE" -nt "$PL_FILE" ];
 then
     echo "*** ITM newest"
     SAVED_LAUNCHERS=$ITM_PINNED_APPS
@@ -133,8 +145,16 @@ fi
 
 echo "*** SAVED_LAUNCHERS final value: $SAVED_LAUNCHERS"
 
-# remove comparison time file
-rm $COMPFILE
+# SAVE current world clocks
+SAVED_WC=""
+
+WC_FILE=/home/$USER/.cinnamon/configs/calendar@simonwiles.net/113.json
+if [ -e "$WC_FILE" ];
+then
+    SAVED_WC=$(jq -c '.["worldclocks"].value' < $WC_FILE)
+    #SAVED_WC=$(echo "$TEMP_WC" | sed "s@\ @'\\\ '@g")
+    echo "*** SAVED_WC set to: $SAVED_WC"
+fi
 
 # prompt user    
 CHOICE=$(zenity --list --title="wasta [Layout]" \
@@ -223,9 +243,16 @@ case "$CHOICE" in
     rm -rf /home/$USER/.local/share/cinnamon/applets/IcingTaskManager@json
     rm -rf /home/$USER/.cinnamon/configs/IcingTaskManager@json
 
+    # calendar@simonwiles.net:
+    #   - remove any local applet and configs (will be re-created from defaults)
+    rm -rf /home/$USER/.local/share/cinnamon/applets/calendar@simonwiles.net
+    rm -rf /home/$USER/.cinnamon/configs/calendar@simonwiles.net
+
     # if SAVED_LAUNCHERS set pinned-apps
     updateITMPinned
 
+    # if SAVED_WC set worldclocks
+    updateWorldClocks
 ;;
 
 "unity")
@@ -239,6 +266,11 @@ case "$CHOICE" in
     rm -rf /home/$USER/.local/share/cinnamon/applets/IcingTaskManager@json
     rm -rf /home/$USER/.cinnamon/configs/IcingTaskManager@json
 
+    # calendar@simonwiles.net:
+    #   - remove any local applet and configs (will be re-created from defaults)
+    rm -rf /home/$USER/.local/share/cinnamon/applets/calendar@simonwiles.net
+    rm -rf /home/$USER/.cinnamon/configs/calendar@simonwiles.net
+
     # transparent-panels@germanfr
     #   - remove any local extension and configs (will be re-created from defaults)
     rm -rf /home/$USER/.local/share/cinnamon/extensions/transparent-panels@germanfr
@@ -246,6 +278,9 @@ case "$CHOICE" in
 
     # if SAVED_LAUNCHERS set pinned-apps
     updateITMPinned
+
+    # if SAVED_WC set worldclocks
+    updateWorldClocks
 ;;
 
 "cupertino")
@@ -253,6 +288,11 @@ case "$CHOICE" in
     #   - remove any local applet and configs (will be re-created from defaults)
     rm -rf /home/$USER/.local/share/cinnamon/applets/menu@cinnamon.org
     rm -rf /home/$USER/.cinnamon/configs/menu@cinnamon.org
+
+    # calendar@simonwiles.net:
+    #   - remove any local applet and configs (will be re-created from defaults)
+    rm -rf /home/$USER/.local/share/cinnamon/applets/calendar@simonwiles.net
+    rm -rf /home/$USER/.cinnamon/configs/calendar@simonwiles.net
 
     PLANK_FOLDER=/home/$USER/.config/plank/dock1/launchers
     if ! [ -e "$PLANK_FOLDER" ];
@@ -272,6 +312,9 @@ case "$CHOICE" in
         
     # start Plank
     nohup plank &> /dev/null &
+
+    # if SAVED_WC set worldclocks
+    updateWorldClocks
 ;;
 
 *)
