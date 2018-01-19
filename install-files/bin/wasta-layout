@@ -223,7 +223,7 @@ case "$CHOICE" in
         echo "updating JSON_FILE: $JSON_FILE"
         #jq can't do "sed -i" inplace update, so need to re-create file, then
         # update ownership (in case run as root)
-        NEW_FILE=$(jq '.["launcherList"].value='$SAVED_LAUNCHERS < $JSON_FILE)
+        NEW_FILE=$(jq '.["launcherList"].value='"$SAVED_LAUNCHERS" < $JSON_FILE)
         echo "$NEW_FILE" > $JSON_FILE
     fi
 ;;
