@@ -159,13 +159,9 @@ fi
 # prompt user    
 CHOICE=$(zenity --list --title="wasta [Layout]" \
     --window-icon=/usr/share/icons/hicolor/64x64/apps/wasta-linux.png \
-    --height=450 --text \
-"This utility <i><b>changes</b></i> the layout of the <i>panel</i> (taskbar) and other items of the Cinnamon Desktop Interface.
-
-Selecting a layout below will change the layout for the current user as well as set the system-wide default layout, but will not directly change the layout of other existing users.  These other users can run Wasta-Layout to set their desired layout.
-
-The system defaults will be able to be overridden by user settings, only the system default
-layouts are affected.
+    --height=300 --text \
+"This utility <i><b>changes</b></i> the layout of the <i>panel</i> (taskbar) and other
+items of the Cinnamon Desktop Interface.
 
 <b><i>Choose your preferred layout:</i></b>" --radiolist \
     --column "" --column "Layout" --column "Description" \
@@ -178,7 +174,7 @@ if [ "$CHOICE" == "" ];
 then
     # EXIT: no layout selected
     echo
-    echo "no layout selected: exiting..."
+    echo "*** no layout selected: exiting..."
     echo
     exit 0
 fi

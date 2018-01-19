@@ -1,3 +1,9 @@
+wasta-cinnamon-layout-3-6 (0.1.6) xenial; urgency=medium
+
+  * wasta-layout: clean up zenity dialog
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Fri, 19 Jan 2018 09:43:53 +0300
+
 wasta-cinnamon-layout-3-6 (0.1.5) xenial; urgency=medium
 
   * wasta-layout: save and restore worldclocks for user
