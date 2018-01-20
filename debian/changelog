@@ -1,3 +1,13 @@
+wasta-cinnamon-layout-3-6 (0.9.0) xenial; urgency=medium
+
+  * wasta-layout: reset all "panels" dconf values since when the
+    number of panels changed if these were not updated a call to
+    'cinnamon-settings panel' would crash.
+  * unity gschema.override: added the additional panels items to ensure
+    accounted for.
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Sat, 20 Jan 2018 13:13:58 +0300
+
 wasta-cinnamon-layout-3-6 (0.1.7) xenial; urgency=medium
 
   * wasta-layout: SAVED_LAUNCHERS syntax fix

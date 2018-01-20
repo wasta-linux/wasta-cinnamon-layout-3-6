@@ -31,6 +31,8 @@
 #   2018-01-18 rik: default: remove calendar@cinnamon.org so will be re-created
 #       with defaults
 #       - save and restore worldclocks from calendar@simonwiles.net
+#   2018-01-20 rik: resetting all "panels" items that could have multiple
+#       panels.  Without this, "cinnamon-settings panel" was crashing.
 #
 # ==============================================================================
 
@@ -336,10 +338,14 @@ MSG+="Restarting Cinnamon to Apply Changes\n\n"
 # need to reset keys associated with panel layouts
 gsettings reset org.cinnamon enabled-applets
 gsettings reset org.cinnamon enabled-extensions
+# all "panels" items need reset since number of panels could have changed
 gsettings reset org.cinnamon panels-autohide
 gsettings reset org.cinnamon panels-enabled
 gsettings reset org.cinnamon panels-height
+gsettings reset org.cinnamon panels-hide-delay
 gsettings reset org.cinnamon panels-resizable
+gsettings reset org.cinnamon panels-scale-text-icons
+gsettings reset org.cinnamon panels-show-delay
 
 # restart cinnamon
 nohup cinnamon --replace &> /dev/null &
