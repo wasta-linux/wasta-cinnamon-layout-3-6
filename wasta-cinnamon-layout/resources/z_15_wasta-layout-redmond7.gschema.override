@@ -27,6 +27,8 @@
 #       glib-compile-schemas /usr/share/glib-2.0/schemas/
 #
 #   2017-12-24 rik: initial script
+#   2018-02-28 rik: set panels-scale-text-icons to false or else ibus menus
+#       get corrupted.
 #
 # ==============================================================================
 
@@ -36,3 +38,4 @@ enabled-extensions = []
 panels-enabled = ['1:0:bottom']
 panels-height = ['1:35']
 panels-resizable = ['1:true']
+panels-scale-text-icons = ['1:false']

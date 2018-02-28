@@ -31,6 +31,8 @@
 #   2018-01-05 rik: initial script
 #   2018-01-20 rik: adding additional 'panels' items to ensure set correctly
 #       - reducing side panel height to 36
+#   2018-02-28 rik: set panels-scale-text-icons to false or else ibus menus
+#       get corrupted.
 #
 # ==============================================================================
 
@@ -43,5 +45,5 @@ panels-enabled = ['1:0:top', '2:0:left']
 panels-height = ['1:28', '2:36']
 panels-hide-delay = ['1:0', '2:0']
 panels-resizable = ['1:false', '2:true']
-panels-scale-text-icons = ['1:true', '2:true']
+panels-scale-text-icons = ['1:false', '2:false']
 panels-show-delay = ['1:0', '2:0']

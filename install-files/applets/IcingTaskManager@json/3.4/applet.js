@@ -359,9 +359,9 @@ MyApplet.prototype = {
     Gettext.bindtextdomain(metadata.uuid, GLib.get_home_dir() + '/.local/share/locale');
 
     this.getAutoStartApps();
-    this._onSwitchWorkspace = throttle(this._onSwitchWorkspace, 100, true);
+    this.onSwitchWorkspace = throttle(this.onSwitchWorkspace, 100, true);
     this.signals.connect(this.actor, 'scroll-event', (c, e) => this.handleScroll(e));
-    this.signals.connect(global.window_manager, 'switch-workspace', Lang.bind(this, this._onSwitchWorkspace));
+    this.signals.connect(global.window_manager, 'switch-workspace', Lang.bind(this, this.onSwitchWorkspace));
     this.signals.connect(global.screen, 'workspace-removed', Lang.bind(this, this.onWorkspaceRemoved));
     this.signals.connect(global.screen, 'window-monitor-changed', Lang.bind(this, this._onWindowMonitorChanged));
     this.signals.connect(global.screen, 'monitors-changed', Lang.bind(this, this.on_applet_instances_changed));
@@ -448,7 +448,7 @@ MyApplet.prototype = {
       return;
     }
     // Query apps for the current workspace
-    this._onSwitchWorkspace();
+    this.onSwitchWorkspace();
     this._bindAppKeys();
     this._updateSpacing();
     this.state.set({appletReady: true});
@@ -996,27 +996,33 @@ MyApplet.prototype = {
     this.state.set({currentWs: global.screen.get_active_workspace_index()});
   },
 
+  onSwitchWorkspace: function() {
+    if (typeof require !== 'undefined') {
+      setTimeout(() => this._onSwitchWorkspace(), 0);
+    } else {
+      this._onSwitchWorkspace();
+    }
+  },
+
   _onSwitchWorkspace: function () {
-    setTimeout(() => {
-      this.state.set({currentWs: global.screen.get_active_workspace_index()});
-      let metaWorkspace = global.screen.get_workspace_by_index(this.state.currentWs);
+    this.state.set({currentWs: global.screen.get_active_workspace_index()});
+    let metaWorkspace = global.screen.get_workspace_by_index(this.state.currentWs);
 
-      // If the workspace we switched to isn't in our list,
-      // we need to create an AppList for it
-      let refWorkspace = findIndex(this.appLists, (item) => item.metaWorkspace && isEqual(item.metaWorkspace, metaWorkspace));
+    // If the workspace we switched to isn't in our list,
+    // we need to create an AppList for it
+    let refWorkspace = findIndex(this.appLists, (item) => item.metaWorkspace && isEqual(item.metaWorkspace, metaWorkspace));
 
-      if (refWorkspace === -1) {
-        this.appLists.push(new AppList({
-          metaWorkspace: metaWorkspace,
-          state: this.state,
-          index: this.state.currentWs
-        }));
-        refWorkspace = this.appLists.length - 1;
-      }
+    if (refWorkspace === -1) {
+      this.appLists.push(new AppList({
+        metaWorkspace: metaWorkspace,
+        state: this.state,
+        index: this.state.currentWs
+      }));
+      refWorkspace = this.appLists.length - 1;
+    }
 
-      this.actor.remove_all_children();
-      this.actor.add_child(this.appLists[refWorkspace].actor);
-    }, 0);
+    this.actor.remove_all_children();
+    this.actor.add_child(this.appLists[refWorkspace].actor);
   },
 
   _onOverviewShow: function () {

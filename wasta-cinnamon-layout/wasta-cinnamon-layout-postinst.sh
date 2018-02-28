@@ -10,7 +10,8 @@
 #   2018-01-05 rik: initial release
 #   2018-01-18 rik: transparent-panels: set first-launch default to false
 #   - ITM thumbnail-size default=8
-#
+#   2018-02-28 rik: ITM - include-all-windows: set to "false"
+#   - ITM: thumbnail-padding: set to 5
 #
 # ==============================================================================
 
@@ -60,16 +61,20 @@ echo "$NEW_FILE" > $JSON_FILE
 
 # applet: IcingTaskManager@json
 JSON_FILE=/usr/share/cinnamon/applets/IcingTaskManager@json/3.*/settings-schema.json
+echo "updating JSON_FILE: $JSON_FILE"
 # updates:
 # - number-display: for "all open apps" (rather than only showing number if more than 1)
 # - pinned-apps: wasta defaults
 # - cycleMenusHotkey: disable (wast defaulted to super+space which is for ibus)
 # - enable-hover-peek: disable (so no "flashing" on screen when hovering previews)
 # - icon-spacing: spread out a bit (too crowded by default) and set max a bit bigger
-# - icon-padding: increase a bit again for a bit of padding
+# - icon-padding: increase a bit again for a bit of padding between items
+# - include-all-windows: set to "false" so child windows aren't shown
+# - thumbnail-padding: set to 5 (for space around thumbnails)
+# - thumbnail-size: set to 8
 # - note: jq can't do "sed -i" inplace update, so need to re-create file, then
 #     update ownership (in case run as root)
-NEW_FILE=$(jq '.["number-display"].default=2 | .["pinned-apps"].default=["firefox.desktop", "thunderbird.desktop", "nemo.desktop", "libreoffice-writer.desktop", "vlc.desktop"] | .["cycleMenusHotkey"].default="" | .["enable-hover-peek"].default=false | .["icon-spacing"].default=15 | .["icon-spacing"].max=21 | .["icon-padding"].default=11 | .["thumbnail-size"].default=8' \
+NEW_FILE=$(jq '.["number-display"].default=2 | .["pinned-apps"].default=["firefox.desktop", "thunderbird.desktop", "nemo.desktop", "libreoffice-writer.desktop", "vlc.desktop"] | .["cycleMenusHotkey"].default="" | .["enable-hover-peek"].default=false | .["icon-spacing"].default=15 | .["icon-spacing"].max=21 | .["icon-padding"].default=11 | .["include-all-windows"].default=false | .["thumbnail-padding"].default=5 | .["thumbnail-size"].default=8' \
     < $JSON_FILE)
 echo "$NEW_FILE" > $JSON_FILE
 
