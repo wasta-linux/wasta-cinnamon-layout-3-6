@@ -33,6 +33,8 @@
 #       - reducing side panel height to 36
 #   2018-02-28 rik: set panels-scale-text-icons to false or else ibus menus
 #       get corrupted.
+#   2018-03-05 rik: allowed panel 2 (sidebar) to scale icons (and set width
+#       to 40)
 #
 # ==============================================================================
 
@@ -42,8 +44,8 @@ enabled-extensions = ['transparent-panels@germanfr']
 no-adjacent-panel-barriers = true
 panels-autohide = ['1:false', '2:false']
 panels-enabled = ['1:0:top', '2:0:left']
-panels-height = ['1:28', '2:36']
+panels-height = ['1:28', '2:40']
 panels-hide-delay = ['1:0', '2:0']
 panels-resizable = ['1:false', '2:true']
-panels-scale-text-icons = ['1:false', '2:false']
+panels-scale-text-icons = ['1:false', '2:true']
 panels-show-delay = ['1:0', '2:0']

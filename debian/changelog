@@ -1,3 +1,11 @@
+wasta-cinnamon-layout-3-6 (0.9.3) xenial; urgency=medium
+
+  * z_15_wasta-layout-unity.gschema.override:
+    - allow second panel (sidebar) to scale text icons
+    - set second panel (sidebar) height to 40 px
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Mon, 05 Mar 2018 09:58:48 +0300
+
 wasta-cinnamon-layout-3-6 (0.9.2) xenial; urgency=medium
 
   * applets/ITM: update version
