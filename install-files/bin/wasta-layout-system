@@ -7,6 +7,8 @@
 #
 #   2017-12-24 rik: initial script
 #   2018-01-18 rik: only killall plank if plank process detected
+#   2018-03-26 rik: adding removeMenuFavs function for unity
+#   - adding changeMenuIcon function for unity
 #
 # ==============================================================================
 
@@ -55,10 +57,43 @@ resetMenu()
     # reset to not use custom menu icon
     # reset menu icon value
     # reset label to "Menu"
-    echo "updating JSON_FILE: $JSON_FILE"
+    echo "Resetting JSON_FILE:"
+    echo "    $JSON_FILE"
     #jq can't do "sed -i" inplace update, so need to re-create file, then
     # update ownership (in case run as root)
     NEW_FILE=$(jq '.["favbox-show"].default=true | .["menu-icon-custom"].default=false | .["menu-icon"].default="'/usr/share/cinnamon/theme/menu-symbolic.svg'" | .["menu-label"].default="Menu"' \
+        < $JSON_FILE)
+    echo "$NEW_FILE" > $JSON_FILE
+}
+
+removeMenuFavs()
+{
+    # menu applet updates
+    JSON_FILE=/usr/share/cinnamon/applets/menu@cinnamon.org/settings-schema.json
+    # hide favorite / shutdown options
+    # use custom menu icon
+    # remove label
+    echo "Removing Favorites and Session options from JSON_FILE:"
+    echo "    $JSON_FILE"
+    #jq can't do "sed -i" inplace update, so need to re-create file, then
+    # update ownership (in case run as root)
+    NEW_FILE=$(jq '.["favbox-show"].default=false' \
+        < $JSON_FILE)
+    echo "$NEW_FILE" > $JSON_FILE
+}
+
+changeMenuIcon()
+{
+    # menu applet updates
+    JSON_FILE=/usr/share/cinnamon/applets/menu@cinnamon.org/settings-schema.json
+    # hide favorite / shutdown options
+    # use custom menu icon
+    # remove label
+    echo "Removing Favorites and Session options from JSON_FILE:"
+    echo "    $JSON_FILE"
+    #jq can't do "sed -i" inplace update, so need to re-create file, then
+    # update ownership (in case run as root)
+    NEW_FILE=$(jq '.["menu-icon-custom"].default=true | .["menu-icon"].default="'$DIR/resources/launcher_bfb.png'" | .["menu-label"].default=""' \
         < $JSON_FILE)
     echo "$NEW_FILE" > $JSON_FILE
 }
@@ -104,7 +139,7 @@ redmond7)
     ln -s $DIR/resources/z_15_wasta-layout-redmond7.gschema.override \
         $SCHEMA_DIR/
 
-    # reset menu applet:
+    # reset Main Menu
     resetMenu
 
     echo
@@ -118,17 +153,10 @@ unity)
     ln -s $DIR/resources/z_15_wasta-layout-unity.gschema.override \
         $SCHEMA_DIR/
 
-    # menu applet updates
-    JSON_FILE=/usr/share/cinnamon/applets/menu@cinnamon.org/settings-schema.json
-    # hide favorite / shutdown options
-    # use custom menu icon
-    # remove label
-    echo "updating JSON_FILE: $JSON_FILE"
-    #jq can't do "sed -i" inplace update, so need to re-create file, then
-    # update ownership (in case run as root)
-    NEW_FILE=$(jq '.["favbox-show"].default=false | .["menu-icon-custom"].default=true | .["menu-icon"].default="'$DIR/resources/launcher_bfb.png'" | .["menu-label"].default=""' \
-        < $JSON_FILE)
-    echo "$NEW_FILE" > $JSON_FILE
+    # remove Favorites and Session options from Main Menu
+    removeMenuFavs
+    # set bfb icon and no label for Main Menu
+    changeMenuIcon
 
     echo
     echo " *** finished setting layout to $1"
@@ -141,8 +169,12 @@ cupertino)
     ln -s $DIR/resources/z_15_wasta-layout-cupertino.gschema.override \
         $SCHEMA_DIR/
 
-    # reset menu applet:
+    # reset Main Menu
     resetMenu
+    # remove Favorites and Session options from Main Menu
+    # rik: not enabling for now so as to not confuse users... but it is
+    # "cleaner looking" with favorties removed
+    # removeMenuFavs
 
     # set Plank to autostart
     if ! [ -e $PLANK_FILE ];
@@ -161,11 +193,11 @@ cupertino)
 
 *)
     # Layout not supported... don't do anything!
-	echo
-	echo " *** Layout not supported: $1" >&2
-	echo "Exiting...."
-	sleep 5s
-	exit 2
+    echo
+    echo " *** Layout not supported: $1" >&2    
+    echo "Exiting...."
+    sleep 5s
+    exit 2
 ;;
 
 esac

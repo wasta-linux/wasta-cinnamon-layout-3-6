@@ -33,6 +33,7 @@
 #       - save and restore worldclocks from calendar@simonwiles.net
 #   2018-01-20 rik: resetting all "panels" items that could have multiple
 #       panels.  Without this, "cinnamon-settings panel" was crashing.
+#   2018-01-20 rik: change cupertino to have shutdown menu on right side
 #
 # ==============================================================================
 
@@ -292,6 +293,11 @@ case "$CHOICE" in
     rm -rf /home/$USER/.local/share/cinnamon/applets/calendar@simonwiles.net
     rm -rf /home/$USER/.cinnamon/configs/calendar@simonwiles.net
 
+    # transparent-panels@germanfr
+    #   - remove any local extension and configs (will be re-created from defaults)
+    rm -rf /home/$USER/.local/share/cinnamon/extensions/transparent-panels@germanfr
+    rm -rf /home/$USER/.cinnamon/configs/transparent-panels@germanfr
+
     PLANK_FOLDER=/home/$USER/.config/plank/dock1/launchers
     if ! [ -e "$PLANK_FOLDER" ];
     then
@@ -317,7 +323,7 @@ case "$CHOICE" in
 
 *)
 ;;
-    #do nothing    
+    #do nothing
 esac
 
 
@@ -349,6 +355,11 @@ gsettings reset org.cinnamon panels-show-delay
 
 # restart cinnamon
 nohup cinnamon --replace &> /dev/null &
+
+# unity needs the panel-height reset again: maybe because before the replace
+#   it was not active?  POSSIBLY want to do all the resetting here instead
+#   of before?
+gsettings reset org.cinnamon panels-height
 
 # give a few seconds for Cinnamon to finish restarting
 sleep 3s

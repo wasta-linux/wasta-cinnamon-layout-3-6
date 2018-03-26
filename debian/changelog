@@ -1,3 +1,14 @@
+wasta-cinnamon-layout-3-6 (0.9.4) xenial; urgency=medium
+
+  * wasta-layout: adding additional reset of panel-height to see
+    if will help unity layout properly reset
+  * wasta-layout-system: adding removeMenuFavs function
+    - adding changeMenuIcon function
+  * cupertino: adding transparent-panel extension
+    - adding user menu to top right
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Mon, 26 Mar 2018 18:36:43 +0300
+
 wasta-cinnamon-layout-3-6 (0.9.3) xenial; urgency=medium
 
   * z_15_wasta-layout-unity.gschema.override:
