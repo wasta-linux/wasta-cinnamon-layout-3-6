@@ -1,3 +1,10 @@
+wasta-cinnamon-layout-3-6 (1.0.0) xenial; urgency=medium
+
+  * schemas: added from wasta-cinnamon as more appropriate here
+    to ensure match the cinnamon version
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Mon, 02 Apr 2018 09:36:24 +0300
+
 wasta-cinnamon-layout-3-6 (0.9.4) xenial; urgency=medium
 
   * wasta-layout: adding additional reset of panel-height to see
