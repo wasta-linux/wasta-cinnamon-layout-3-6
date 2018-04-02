@@ -1,3 +1,9 @@
+wasta-cinnamon-layout-3-6 (1.0.1) xenial; urgency=medium
+
+  * applets: adding new upstream ITM version
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Mon, 02 Apr 2018 12:34:50 +0300
+
 wasta-cinnamon-layout-3-6 (1.0.0) xenial; urgency=medium
 
   * schemas: added from wasta-cinnamon as more appropriate here
