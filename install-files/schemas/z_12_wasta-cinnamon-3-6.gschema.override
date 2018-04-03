@@ -64,6 +64,8 @@
 #       menu problems
 #       - nemo: set icon-view size to standard
 #   2018-04-03 rik: setting gnome background to match wasta default
+#   2018-04-04 rik: removing backgrounds: should be set PER series so
+#       wasta-cinnamon-xenial or wasta-cinnamon-bionic will set
 #
 # ==============================================================================
 
@@ -87,9 +89,6 @@ panels-resizable = ['1:false']
 panels-scale-text-icons = ['1:false']
 show-snap-osd = false
 startup-animation = false
-
-[org.cinnamon.desktop.background]
-picture-uri = 'file:///usr/share/wasta-multidesktop/resources/clarity_by_sigi_sagi.jpg'
 
 [org.cinnamon.desktop.interface]
 clock-show-date = true
@@ -185,9 +184,6 @@ triggers = ['<Control>space']
 custom-font = 'Ubuntu 11'
 xkb-icon-rgba = '#FFFFFF'
 use-custom-font = true
-
-[org.gnome.desktop.background]
-picture-uri = 'file:///usr/share/wasta-multidesktop/resources/clarity_by_sigi_sagi.jpg'
 
 [org.nemo.desktop]
 computer-icon-visible = false

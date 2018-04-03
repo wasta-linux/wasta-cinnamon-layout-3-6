@@ -1,3 +1,9 @@
+wasta-cinnamon-layout-3-6 (1.0.2) xenial; urgency=medium
+
+  * gschema.override: removing background as is set per series instead
+
+ -- Rik Shaw <rikshaw76@gmail.com>  Tue, 03 Apr 2018 16:06:24 +0300
+
 wasta-cinnamon-layout-3-6 (1.0.1) xenial; urgency=medium
 
   * applets: adding new upstream ITM version
